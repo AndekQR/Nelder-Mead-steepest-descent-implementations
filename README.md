@@ -1,4 +1,4 @@
-# Project Title
+# Nelder-Mead-steepest-descent
 
 The program shows a sample implementation of the Nelder-Mead method and the fastest descent method.
 
