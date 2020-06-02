@@ -23,17 +23,19 @@ public class Program {
                 SteepestDescentParams steepestDescentParams=program.getsteepestDescentParams();
                 System.out.println(steepestDescentParams);
                 System.out.println("steepest descent method result: " + new SteepestDescentMethod().start(steepestDescentParams));
+                break;
             }
             case 1: {
                 SteepestDescentParams steepestDescentParams=program.getsteepestDescentParams();
                 System.out.println(steepestDescentParams);
                 System.out.println("steepest descent method result: " + new SteepestDescentMethod().start(steepestDescentParams));
+                break;
             }
             case 2: {
                 NelderMeadParams nelderMeadParams = program.getNelderMeadParams();
                 System.out.println(nelderMeadParams);
                 new NelderMeadMethod().start(nelderMeadParams);
-
+                break;
             }
         }
 
