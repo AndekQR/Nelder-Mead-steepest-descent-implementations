@@ -25,15 +25,15 @@ public class Program {
                 System.out.println("steepest descent method result: " + new SteepestDescentMethod().start(steepestDescentParams));
             }
             case 1: {
-                NelderMeadParams nelderMeadParams = program.getNelderMeadParams();
-
-                System.out.println(nelderMeadParams);
-                new NelderMeadMethod().start(nelderMeadParams);
-            }
-            case 2: {
                 SteepestDescentParams steepestDescentParams=program.getsteepestDescentParams();
                 System.out.println(steepestDescentParams);
                 System.out.println("steepest descent method result: " + new SteepestDescentMethod().start(steepestDescentParams));
+            }
+            case 2: {
+                NelderMeadParams nelderMeadParams = program.getNelderMeadParams();
+                System.out.println(nelderMeadParams);
+                new NelderMeadMethod().start(nelderMeadParams);
+
             }
         }
 
