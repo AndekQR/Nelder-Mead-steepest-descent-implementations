@@ -1,4 +1,4 @@
-# Project Title
+# Nelder-Mead-steepest-descent
 
 The program shows a sample implementation of the Nelder-Mead method and the fastest descent method.
 
@@ -9,4 +9,4 @@ The program shows a sample implementation of the Nelder-Mead method and the fast
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License
