@@ -52,7 +52,7 @@ public class Program {
         Pattern betaPattern=Pattern.compile("beta:\\s?");
         Pattern gammaPattern=Pattern.compile("gamma:\\s?");
         Pattern epsilonPattern=Pattern.compile("epsilon:\\s?");
-        Pattern doubleNumberPattern=Pattern.compile("\\d+.?\\d*");
+        Pattern doubleNumberPattern=Pattern.compile("\\d+(.\\d+)?");
 
         NelderMeadParams nelderMeadParams=new NelderMeadParams();
 
@@ -109,7 +109,7 @@ public class Program {
     }
 
     private SteepestDescentParams getsteepestDescentParams() {
-        Pattern funtionPattern=Pattern.compile("newtonRaphsonFunction:\\s?");
+        Pattern funtionPattern=Pattern.compile("function:\\s?");
         Pattern startingPointPattern=Pattern.compile("starting point:\\s?");
         Pattern precisionPattern=Pattern.compile("precision:\\s?");
 
@@ -123,7 +123,7 @@ public class Program {
                 if (functionMatcher.find()) {
                     steepestDescentParams.setFunction(line.substring(functionMatcher.end()));
                 } else if (startingPointMatcher.find()) {
-                    Pattern pointsPattern=Pattern.compile("\\d+.?\\d*");
+                    Pattern pointsPattern=Pattern.compile("\\d+(.\\d+)?");
                     Matcher pointsMatcher=pointsPattern.matcher(line.substring(startingPointMatcher.end())); //[0.0, 0.0]
                     while (pointsMatcher.find()) {
                         steepestDescentParams.getStartingPoint().add(Double.parseDouble(pointsMatcher.group()));

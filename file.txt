@@ -1,6 +1,6 @@
-Newton Raphson method paramateres
-newtonRaphsonFunction: x-y+2*x^2+2*x*y+y^2
-starting point: [0.0, 0.0]
+Steepest descent method parameters
+function: x-y+2*x^2+2*x*y+y^2
+starting point: [4.0, 7.0]
 precision: 0.01
 
 Nelder Mead method parameters
@@ -11,4 +11,5 @@ x3: [4.0, 5.0]
 alfa: 1
 beta: 0.5
 gamma: 2.0
-epsilon: 0.2
+epsilon: 0.0001
+

@@ -30,20 +30,14 @@ public class SteepestDescentMethod {
 
             System.out.println("New X: " + nextX);
 
-            Double first=evaluateExpression(new SteepestDescentParams(steepestDescentParams.getFunction(), nextX, null));
-            Double second=evaluateExpression(new SteepestDescentParams(steepestDescentParams.getFunction(), prevX, null));
+            SteepestDescentParams steepestDescentParams1=new SteepestDescentParams(steepestDescentParams.getFunction(), nextX, null);
+            Double first = Utils.evaluate(steepestDescentParams1.getFunction(), steepestDescentParams1.getVariablesName(), steepestDescentParams1.getStartingPoint());
+            SteepestDescentParams steepestDescentParams2=new SteepestDescentParams(steepestDescentParams.getFunction(), prevX, null);
+            Double second=Utils.evaluate(steepestDescentParams2.getFunction(), steepestDescentParams2.getVariablesName(), steepestDescentParams2.getStartingPoint());
             conditionToCheck=Math.abs((first - second));
             k++;
         } while (conditionToCheck > steepestDescentParams.getPrecision());
         return nextX;
-    }
-
-    private Double evaluateExpression(final SteepestDescentParams steepestDescentParams) throws IllegalArgumentException {
-        Expression expression=new Expression(steepestDescentParams.getFunction());
-        for (int i=0; i < steepestDescentParams.getStartingPoint().size(); i++) {
-            expression.setVariable(steepestDescentParams.getVariablesName()[i].toString(), steepestDescentParams.getStartingPoint().get(i).toString());
-        }
-        return expression.eval().doubleValue();
     }
 
     private List<Double> getNextX(List<Double> prevX, List<Double> lastS, SteepestDescentParams steepestDescentParams) {
@@ -51,13 +45,14 @@ public class SteepestDescentMethod {
         List<String> arguments=this.getArguments(prevX, lastS);
         String expressionString=steepestDescentParams.getFunction();
         for (int i=0; i < arguments.size(); i++) {
-            expressionString=expressionString.replace(steepestDescentParams.getVariablesName()[i].toString(), " ( " + arguments.get(i) + " ) ");
+            expressionString=expressionString.replace(steepestDescentParams.getVariablesName().get(i), " ( " + arguments.get(i) + " ) ");
         }
+
+        System.out.println(expressionString);
         double raphson=this.newtonRaphsonMethod.raphson(expressionString);
         System.out.println("raphsonValue: " + raphson);
         for (int i=0; i < arguments.size(); i++) {
             double tmp=prevX.get(i) + (raphson * lastS.get(i));
-            System.out.println("next x calculation: " + prevX.get(i) + " + ( " + raphson + " * " + lastS.get(i) + " = " + tmp);
             x.add(tmp);
         }
         return x;

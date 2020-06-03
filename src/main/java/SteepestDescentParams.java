@@ -2,12 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SteepestDescentParams {
 
-    private final SortedSet<Character> variablesName;
+    private SortedSet<String> variablesName;
     private String function;
     private List<Double> startingPoint;
     private Double precision;
@@ -21,25 +19,15 @@ public class SteepestDescentParams {
         this.function=function;
         this.startingPoint=startingPoint;
         this.precision=precision;
-        this.variablesName=new TreeSet<>();
-        this.parseNames();
-    }
-
-    private void parseNames() {
-        Pattern varaibleMatcher=Pattern.compile("[a-z]");
-        this.variablesName.clear();
-        Matcher matcher=varaibleMatcher.matcher(this.function);
-        while (matcher.find()) {
-            this.variablesName.add(matcher.group().charAt(0));
-        }
+        this.variablesName=Utils.parseNames(this.getFunction());
     }
 
     public int getVaraiblesNamesSize() {
         return this.variablesName.size();
     }
 
-    public Character[] getVariablesName() {
-        return this.variablesName.toArray(new Character[this.variablesName.size()]);
+    public ArrayList<String> getVariablesName() {
+        return new ArrayList<>(this.variablesName);
     }
 
     public String getFunction() {
@@ -48,7 +36,7 @@ public class SteepestDescentParams {
 
     public void setFunction(String function) {
         this.function=function;
-        this.parseNames();
+        this.variablesName = Utils.parseNames(function);
     }
 
 

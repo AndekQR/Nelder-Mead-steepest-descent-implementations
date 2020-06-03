@@ -21,45 +21,61 @@ public class NelderMeadMethod {
             params.getX().forEach(System.out::println);
 
             int h =this.getHighestVarIndex(params.getX());
-            System.out.println("h: "+h);
+            System.out.println("h: "+(h+1));
             int l =this.getLowest(params.getX());
+            System.out.println("l: "+(l+1));
             x0=this.getX0(h, params);
+            System.out.println("x0: "+x0);
             Variable xR=getXR(params, x0, h);
             System.out.println("xR: " + xR);
             Variable xE=new Variable();
             Variable xC=new Variable();
 
             if ((params.getX().get(h).getValue() > xR.getValue()) && (xR.getValue() > params.getX().get(l).getValue())) { //4
+                System.out.println("f(Xh) > f(Xr) > f(Xl)");
                 params.getX().get(h).setArguments(xR.getArguments());
-                params.getX().get(h).setValue(this.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                params.getX().get(h).setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                System.out.println("New X"+(h+1)+": "+params.getX().get(h));
             } else {
                 if (xR.getValue() < params.getX().get(l).getValue()) { //5
+                    System.out.println("f(Xr) < f(Xl)");
                     xE=this.getXE(params, xR, x0);
                     System.out.println("xE: " + xE);
 
                     if (xE.getValue() < params.getX().get(l).getValue()) { //6
+                        System.out.println("f(Xe) < f(Xl)");
                         params.getX().get(h).setArguments(xE.getArguments());
-                        params.getX().get(h).setValue(this.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        params.getX().get(h).setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        System.out.println("New X"+(h+1)+": "+params.getX().get(h));
 
                     } else if (xE.getValue() > params.getX().get(l).getValue()) {
+                        System.out.println("f(Xe) > f(Xl)");
                         params.getX().get(h).setArguments(xR.getArguments());
-                        params.getX().get(h).setValue(this.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        params.getX().get(h).setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        System.out.println("New X"+(h+1)+": "+params.getX().get(h));
                     }
                 } else {
                     if ((this.isEachVarGreater(h, xR, params)) && (xR.getValue() < params.getX().get(h).getValue())) { //7
+                        System.out.println("f(Xi) > f(Xr) && f(Xr) < f(Xh)");
                         params.getX().get(h).setArguments(xR.getArguments());
-                        params.getX().get(h).setValue(this.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        params.getX().get(h).setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        System.out.println("New X"+(h+1)+": "+params.getX().get(h));
                         xC=this.getXC(params, h, x0);
                         System.out.println("xC: " + xC);
 
                     } else if (xR.getValue() > params.getX().get(h).getValue()) {
+                        System.out.println("f(Xr) > f(Xh)");
                         xC=this.getXC(params, h, x0);
+                        System.out.println("Xc: "+xC);
                     }
 
                     if ((xC.getValue() < params.getX().get(h).getValue()) && (xC.getValue() < xR.getValue())) { //8
+                        System.out.println("f(Xc) < f(Xh) && f(Xc) < f(Xr)");
                         params.getX().get(h).setArguments(xC.getArguments());
-                        params.getX().get(h).setValue(this.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        params.getX().get(h).setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), params.getX().get(h).getArguments()));
+                        System.out.println("New X"+(h+1)+": "+params.getX().get(h));
                     } else {
+                        System.out.println("f(Xc) < f(Xh) && f(Xc) < f(Xr) else ------");
                         this.simplexReduction(params, l);
                     }
                 }
@@ -82,6 +98,7 @@ public class NelderMeadMethod {
                 }
             }
         }
+        this.setValuesToX(params);
     }
 
     private Variable getXC(NelderMeadParams params, int h, Variable x0) {
@@ -93,10 +110,10 @@ public class NelderMeadMethod {
         for (int i=0; i < params.getX().get(h).getArguments().size(); i++) {
             List<Double> args=List.of(params.getBeta(), params.getX().get(h).getArguments().get(i), x0.getArguments().get(i));
             List<String> argsNames=new ArrayList<>(Utils.parseNames(XC_FUNCTION));
-            Double tmp=this.evaluate(XC_FUNCTION, argsNames, args);
+            Double tmp=Utils.evaluate(XC_FUNCTION, argsNames, args);
             result.getArguments().add(tmp);
         }
-        result.setValue(this.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
+        result.setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
         return result;
     }
 
@@ -113,7 +130,7 @@ public class NelderMeadMethod {
 
     private void setValuesToX(NelderMeadParams params) {
         params.getX().forEach(x -> {
-            x.setValue(this.evaluate(params.getFunction(), params.getVariablesName(), x.getArguments()));
+            x.setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), x.getArguments()));
         });
     }
 
@@ -126,10 +143,10 @@ public class NelderMeadMethod {
         for (int i=0; i < xR.getArguments().size(); i++) {
             List<Double> args=List.of(x0.getArguments().get(i), xR.getArguments().get(i), params.getGamma());
             List<String> argsNames=new ArrayList<>(Utils.parseNames(XE_FUNCTION));
-            Double tmp=this.evaluate(XE_FUNCTION, argsNames, args);
+            Double tmp=Utils.evaluate(XE_FUNCTION, argsNames, args);
             result.getArguments().add(tmp);
         }
-        result.setValue(this.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
+        result.setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
         return result;
     }
 
@@ -142,10 +159,10 @@ public class NelderMeadMethod {
         for (int i=0; i < x0.getArguments().size(); i++) {
             List<Double> args=List.of(params.getAlfa(), x0.getArguments().get(i), params.getX().get(h).getArguments().get(i));
             List<String> argsNames=new ArrayList<>(Utils.parseNames(XR_FUNCTION));
-            Double tmp=this.evaluate(XR_FUNCTION, argsNames, args);
+            Double tmp=Utils.evaluate(XR_FUNCTION, argsNames, args);
             result.getArguments().add(tmp);
         }
-        result.setValue(this.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
+        result.setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
         return result;
     }
 
@@ -161,20 +178,11 @@ public class NelderMeadMethod {
             }
             result.getArguments().add(tmp / 2);
         }
-        result.setValue(this.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
+        result.setValue(Utils.evaluate(params.getFunction(), params.getVariablesName(), result.getArguments()));
         return result;
     }
-
-
-    private Double evaluate(final String function, final List<String> argsNames, final List<Double> args) {
-        Expression expression=new Expression(function);
-        for (int i=0; i < argsNames.size(); i++) {
-            expression.setVariable(argsNames.get(i), args.get(i).toString());
-        }
-        return expression.eval().doubleValue();
-    }
-
-
+    
+    
     private int getLowest(List<Variable> vars) {
         if (vars.isEmpty()) throw new IllegalArgumentException("getLowest: vars size equals zero");
         int lowest = 0;
